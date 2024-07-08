@@ -1,33 +1,50 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: "Introduction"
+"og:title": "AiFlow API Reference - Introduction"
+description: "Fundamental concepts of AiFlow's API."
+icon: webhook
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+<Info>
+  AiFlow's API is currently in beta. If you have any questions or feedback,
+  please reach out to us at
+  [support@aiflow.solutions](mailto:support@aiflow.solutions?subject=AiFlow%20API%20Feedback).
+</Info>
 
-## Welcome
+## Base URL
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+AiFlow's API is built on REST principles and is served over HTTPS. To ensure data privacy, unencrypted HTTP is not supported.
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+The Base URL for all API endpoints is:
+
+```bash Terminal
+https://www.app.aiflow.solutions
+```
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+Authentication to AiFlow's API is performed via the Authorization header with a Bearer token. To authenticate, you need to include the Authorization header with the word `Bearer` followed by your API key in your requests like so:
 
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+```bash Terminal
+Authorization: Bearer <Your-Token>
 ```
+
+Learn more about [how to get your API key](/api-reference/tokens).
+
+## Response Codes
+
+The API returns standard HTTP response codes to indicate the success or failure of an API request. Here are a few examples:
+
+| Code  | Description                                                                                    |
+| ----- | ---------------------------------------------------------------------------------------------- |
+| `200` | The request was successful.                                                                    |
+| `400` | The request was invalid or cannot be served.                                                   |
+| `401` | The request requires user authentication.                                                      |
+| `403` | The server understood the request, but refuses to authorize it.                                |
+| `404` | The requested resource could not be found.                                                     |
+| `429` | Too many requests.                                                                             |
+| `500` | The server encountered an unexpected condition which prevented it from fulfilling the request. |
+
+## Caveats
+
+- AiFlow's API is currently in public beta and is subject to change. However, we will do our best to keep breaking changes to a minimum.

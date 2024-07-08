@@ -1,0 +1,856 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Dub.co API",
+        "description": "Dub is link management infrastructure for companies to create marketing campaigns, link sharing features, and referral programs.",
+        "version": "0.0.1",
+        "contact": {
+            "name": "Dub.co Support",
+            "email": "support@dub.co",
+            "url": "https://dub.co/api"
+        },
+        "license": {
+            "name": "AGPL-3.0 license",
+            "url": "https://github.com/dubinc/dub/blob/main/LICENSE.md"
+        }
+    },
+    "servers": [
+        {
+            "url": "https://www.app.aiflow.solutions",
+            "description": "Production API"
+        }
+    ],
+    "x-speakeasy-globals": {
+        "parameters": [
+            {
+                "x-speakeasy-globals-hidden": true,
+                "name": "workspaceId",
+                "in": "query",
+                "deprecated": true,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            {
+                "x-speakeasy-globals-hidden": true,
+                "name": "projectSlug",
+                "in": "query",
+                "deprecated": true,
+                "schema": {
+                    "type": "string"
+                }
+            }
+        ]
+    },
+    "paths": {
+        "/search/contacts": {
+            "get": {
+                "operationId": "searchContacts",
+                "x-speakeasy-name-override": "search",
+                "x-speakeasy-usage-example": true,
+                "summary": "Search contacts",
+                "description": "Search contacts for the authenticated organization.",
+                "tags": [
+                    "Contacts"
+                ],
+                "security": [
+                    {
+                        "token": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "orgId",
+                        "description": "The ID of the organization.",
+                        "schema": {
+                            "type": "string",
+                            "description": "The ID of the organization.",
+                            "deprecated": true
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "searchTerm": {
+                                        "type": "string",
+                                        "description": "The search term to use for the AI-powered query of contacts. For example, 'Hubspot'.",
+                                        "example": "Hubspot"
+                                    },
+                                    "channel": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "The Slack channel to post the results to. Only required for Slack integrations."
+                                    },
+                                    "user": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "The Slack user to post the results to. Only required for Slack integrations."
+                                    },
+                                    "numberOfResults": {
+                                        "type": "number",
+                                        "nullable": true,
+                                        "default": 10,
+                                        "description": "The maximum number of contacts to return. Defaults to 10."
+                                    }
+                                },
+                                "required": [
+                                    "searchTerm"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The queried contacts",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "rows": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string"
+                                                    },
+                                                    "contactId": {
+                                                        "type": "string"
+                                                    },
+                                                    "companyId": {
+                                                        "type": "string"
+                                                    },
+                                                    "title": {
+                                                        "type": "string"
+                                                    },
+                                                    "titleIsCurrentMaster": {
+                                                        "type": "boolean"
+                                                    },
+                                                    "titleTypeMaster": {
+                                                        "type": "string"
+                                                    },
+                                                    "startsAt": {
+                                                        "type": "string"
+                                                    },
+                                                    "endsAt": {
+                                                        "type": "string"
+                                                    },
+                                                    "description": {
+                                                        "type": "string"
+                                                    },
+                                                    "location": {
+                                                        "type": "string"
+                                                    },
+                                                    "city": {
+                                                        "type": "string"
+                                                    },
+                                                    "state": {
+                                                        "type": "string"
+                                                    },
+                                                    "country": {
+                                                        "type": "string"
+                                                    },
+                                                    "countryCode": {
+                                                        "type": "string"
+                                                    },
+                                                    "latitude": {
+                                                        "type": "number"
+                                                    },
+                                                    "longitude": {
+                                                        "type": "number"
+                                                    },
+                                                    "LecInvestor": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "homeCity": {
+                                                                "type": "string"
+                                                            },
+                                                            "homeStateProvince": {
+                                                                "type": "string"
+                                                            },
+                                                            "homeCountry": {
+                                                                "type": "string"
+                                                            },
+                                                            "workCity": {
+                                                                "type": "string"
+                                                            },
+                                                            "workStateProvince": {
+                                                                "type": "string"
+                                                            },
+                                                            "workCountry": {
+                                                                "type": "string"
+                                                            },
+                                                            "altCity": {
+                                                                "type": "string"
+                                                            },
+                                                            "altStateProvince": {
+                                                                "type": "string"
+                                                            },
+                                                            "altCountry": {
+                                                                "type": "string"
+                                                            },
+                                                            "id": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "homeCity",
+                                                            "homeStateProvince",
+                                                            "homeCountry",
+                                                            "workCity",
+                                                            "workStateProvince",
+                                                            "workCountry",
+                                                            "altCity",
+                                                            "altStateProvince",
+                                                            "altCountry",
+                                                            "id"
+                                                        ]
+                                                    },
+                                                    "createdAt": {
+                                                        "type": "string"
+                                                    },
+                                                    "updatedAt": {
+                                                        "type": "string"
+                                                    },
+                                                    "source": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "equilarContactExperienceId": {
+                                                        "type": "string"
+                                                    },
+                                                    "ContactExperienceAcquisition": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "nblCompanyAcquisitionId": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "required": [
+                                                                "nblCompanyAcquisitionId"
+                                                            ]
+                                                        }
+                                                    },
+                                                    "equilarCompanyId": {
+                                                        "type": "string"
+                                                    },
+                                                    "company": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "id": {
+                                                                "type": "string"
+                                                            },
+                                                            "logoUrl": {
+                                                                "type": "string"
+                                                            },
+                                                            "nblProfilePicUrl": {
+                                                                "type": "string"
+                                                            },
+                                                            "equilarCompany": {
+                                                                "type": "object",
+                                                                "properties": {
+                                                                    "id": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "equilarId": {
+                                                                        "type": "number"
+                                                                    },
+                                                                    "companyId": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "company": {
+                                                                        "type": "object",
+                                                                        "properties": {
+                                                                            "id": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "name": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "logoUrl": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "nblProfilePicUrl": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "equilarCompany": {
+                                                                                "type": "object",
+                                                                                "properties": {
+                                                                                    "id": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "equilarId": {
+                                                                                        "type": "number"
+                                                                                    },
+                                                                                    "companyId": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "name": {
+                                                                                        "type": "string",
+                                                                                        "nullable": true
+                                                                                    },
+                                                                                    "logoUrl": {
+                                                                                        "type": "string",
+                                                                                        "nullable": true
+                                                                                    },
+                                                                                    "nblProfilePicUrl": {
+                                                                                        "type": "string",
+                                                                                        "nullable": true
+                                                                                    }
+                                                                                },
+                                                                                "required": [
+                                                                                    "id",
+                                                                                    "equilarId",
+                                                                                    "companyId",
+                                                                                    "name",
+                                                                                    "logoUrl",
+                                                                                    "nblProfilePicUrl"
+                                                                                ]
+                                                                            }
+                                                                        },
+                                                                        "required": [
+                                                                            "id",
+                                                                            "name",
+                                                                            "logoUrl",
+                                                                            "nblProfilePicUrl",
+                                                                            "equilarCompany"
+                                                                        ]
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "id",
+                                                                    "equilarId",
+                                                                    "companyId",
+                                                                    "company"
+                                                                ]
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "name",
+                                                            "id",
+                                                            "logoUrl",
+                                                            "nblProfilePicUrl",
+                                                            "equilarCompany"
+                                                        ]
+                                                    }
+                                                },
+                                                "required": [
+                                                    "id",
+                                                    "contactId",
+                                                    "companyId",
+                                                    "title",
+                                                    "titleIsCurrentMaster",
+                                                    "titleTypeMaster",
+                                                    "startsAt",
+                                                    "endsAt",
+                                                    "description",
+                                                    "location",
+                                                    "city",
+                                                    "state",
+                                                    "country",
+                                                    "countryCode",
+                                                    "latitude",
+                                                    "longitude",
+                                                    "LecInvestor",
+                                                    "createdAt",
+                                                    "updatedAt",
+                                                    "source",
+                                                    "equilarContactExperienceId",
+                                                    "ContactExperienceAcquisition",
+                                                    "equilarCompanyId",
+                                                    "company"
+                                                ]
+                                            }
+                                        },
+                                        "pagination": {
+                                            "type": "object",
+                                            "nullable": true,
+                                            "properties": {
+                                                "currentPageSize": {
+                                                    "type": "number"
+                                                },
+                                                "totalRows": {
+                                                    "type": "number"
+                                                },
+                                                "currentPage": {
+                                                    "type": "number"
+                                                },
+                                                "totalPages": {
+                                                    "type": "number",
+                                                    "nullable": true
+                                                }
+                                            },
+                                            "required": [
+                                                "currentPageSize",
+                                                "totalRows",
+                                                "currentPage",
+                                                "totalPages"
+                                            ]
+                                        },
+                                        "lastRow": {
+                                            "type": "number"
+                                        },
+                                        "queryDuration": {
+                                            "type": "number",
+                                            "nullable": true
+                                        }
+                                    },
+                                    "required": [
+                                        "success",
+                                        "rows",
+                                        "pagination",
+                                        "lastRow",
+                                        "queryDuration"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/409"
+                    },
+                    "410": {
+                        "$ref": "#/components/responses/410"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/429"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "token": {
+                "type": "http",
+                "description": "Default authentication mechanism",
+                "scheme": "bearer",
+                "x-speakeasy-example": "DUB_API_KEY"
+            }
+        },
+        "responses": {
+            "400": {
+                "description": "The server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing).",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "x-speakeasy-name-override": "BadRequest",
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "string",
+                                            "enum": [
+                                                "bad_request"
+                                            ],
+                                            "description": "A short code indicating the error code returned.",
+                                            "example": "bad_request"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "description": "A human readable explanation of what went wrong.",
+                                            "example": "The requested resource was not found."
+                                        },
+                                        "doc_url": {
+                                            "type": "string",
+                                            "description": "A link to our documentation with more details about this error code",
+                                            "example": "https://dub.co/docs/api-reference/errors#bad-request"
+                                        }
+                                    },
+                                    "required": [
+                                        "code",
+                                        "message"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "error"
+                            ]
+                        }
+                    }
+                }
+            },
+            "401": {
+                "description": "Although the HTTP standard specifies \"unauthorized\", semantically this response means \"unauthenticated\". That is, the client must authenticate itself to get the requested response.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "x-speakeasy-name-override": "Unauthorized",
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "string",
+                                            "enum": [
+                                                "unauthorized"
+                                            ],
+                                            "description": "A short code indicating the error code returned.",
+                                            "example": "unauthorized"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "description": "A human readable explanation of what went wrong.",
+                                            "example": "The requested resource was not found."
+                                        },
+                                        "doc_url": {
+                                            "type": "string",
+                                            "description": "A link to our documentation with more details about this error code",
+                                            "example": "https://dub.co/docs/api-reference/errors#unauthorized"
+                                        }
+                                    },
+                                    "required": [
+                                        "code",
+                                        "message"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "error"
+                            ]
+                        }
+                    }
+                }
+            },
+            "403": {
+                "description": "The client does not have access rights to the content; that is, it is unauthorized, so the server is refusing to give the requested resource. Unlike 401 Unauthorized, the client's identity is known to the server.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "x-speakeasy-name-override": "Forbidden",
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "string",
+                                            "enum": [
+                                                "forbidden"
+                                            ],
+                                            "description": "A short code indicating the error code returned.",
+                                            "example": "forbidden"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "description": "A human readable explanation of what went wrong.",
+                                            "example": "The requested resource was not found."
+                                        },
+                                        "doc_url": {
+                                            "type": "string",
+                                            "description": "A link to our documentation with more details about this error code",
+                                            "example": "https://dub.co/docs/api-reference/errors#forbidden"
+                                        }
+                                    },
+                                    "required": [
+                                        "code",
+                                        "message"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "error"
+                            ]
+                        }
+                    }
+                }
+            },
+            "404": {
+                "description": "The server cannot find the requested resource.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "x-speakeasy-name-override": "NotFound",
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "string",
+                                            "enum": [
+                                                "not_found"
+                                            ],
+                                            "description": "A short code indicating the error code returned.",
+                                            "example": "not_found"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "description": "A human readable explanation of what went wrong.",
+                                            "example": "The requested resource was not found."
+                                        },
+                                        "doc_url": {
+                                            "type": "string",
+                                            "description": "A link to our documentation with more details about this error code",
+                                            "example": "https://dub.co/docs/api-reference/errors#not-found"
+                                        }
+                                    },
+                                    "required": [
+                                        "code",
+                                        "message"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "error"
+                            ]
+                        }
+                    }
+                }
+            },
+            "409": {
+                "description": "This response is sent when a request conflicts with the current state of the server.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "x-speakeasy-name-override": "Conflict",
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "string",
+                                            "enum": [
+                                                "conflict"
+                                            ],
+                                            "description": "A short code indicating the error code returned.",
+                                            "example": "conflict"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "description": "A human readable explanation of what went wrong.",
+                                            "example": "The requested resource was not found."
+                                        },
+                                        "doc_url": {
+                                            "type": "string",
+                                            "description": "A link to our documentation with more details about this error code",
+                                            "example": "https://dub.co/docs/api-reference/errors#conflict"
+                                        }
+                                    },
+                                    "required": [
+                                        "code",
+                                        "message"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "error"
+                            ]
+                        }
+                    }
+                }
+            },
+            "410": {
+                "description": "This response is sent when the requested content has been permanently deleted from server, with no forwarding address.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "x-speakeasy-name-override": "InviteExpired",
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "string",
+                                            "enum": [
+                                                "invite_expired"
+                                            ],
+                                            "description": "A short code indicating the error code returned.",
+                                            "example": "invite_expired"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "description": "A human readable explanation of what went wrong.",
+                                            "example": "The requested resource was not found."
+                                        },
+                                        "doc_url": {
+                                            "type": "string",
+                                            "description": "A link to our documentation with more details about this error code",
+                                            "example": "https://dub.co/docs/api-reference/errors#invite-expired"
+                                        }
+                                    },
+                                    "required": [
+                                        "code",
+                                        "message"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "error"
+                            ]
+                        }
+                    }
+                }
+            },
+            "422": {
+                "description": "The request was well-formed but was unable to be followed due to semantic errors.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "x-speakeasy-name-override": "UnprocessableEntity",
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "string",
+                                            "enum": [
+                                                "unprocessable_entity"
+                                            ],
+                                            "description": "A short code indicating the error code returned.",
+                                            "example": "unprocessable_entity"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "description": "A human readable explanation of what went wrong.",
+                                            "example": "The requested resource was not found."
+                                        },
+                                        "doc_url": {
+                                            "type": "string",
+                                            "description": "A link to our documentation with more details about this error code",
+                                            "example": "https://dub.co/docs/api-reference/errors#unprocessable-entity"
+                                        }
+                                    },
+                                    "required": [
+                                        "code",
+                                        "message"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "error"
+                            ]
+                        }
+                    }
+                }
+            },
+            "429": {
+                "description": "The user has sent too many requests in a given amount of time (\"rate limiting\")",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "x-speakeasy-name-override": "RateLimitExceeded",
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "string",
+                                            "enum": [
+                                                "rate_limit_exceeded"
+                                            ],
+                                            "description": "A short code indicating the error code returned.",
+                                            "example": "rate_limit_exceeded"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "description": "A human readable explanation of what went wrong.",
+                                            "example": "The requested resource was not found."
+                                        },
+                                        "doc_url": {
+                                            "type": "string",
+                                            "description": "A link to our documentation with more details about this error code",
+                                            "example": "https://dub.co/docs/api-reference/errors#rate-limit_exceeded"
+                                        }
+                                    },
+                                    "required": [
+                                        "code",
+                                        "message"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "error"
+                            ]
+                        }
+                    }
+                }
+            },
+            "500": {
+                "description": "The server has encountered a situation it does not know how to handle.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "x-speakeasy-name-override": "InternalServerError",
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "string",
+                                            "enum": [
+                                                "internal_server_error"
+                                            ],
+                                            "description": "A short code indicating the error code returned.",
+                                            "example": "internal_server_error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "description": "A human readable explanation of what went wrong.",
+                                            "example": "The requested resource was not found."
+                                        },
+                                        "doc_url": {
+                                            "type": "string",
+                                            "description": "A link to our documentation with more details about this error code",
+                                            "example": "https://dub.co/docs/api-reference/errors#internal-server_error"
+                                        }
+                                    },
+                                    "required": [
+                                        "code",
+                                        "message"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "error"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
