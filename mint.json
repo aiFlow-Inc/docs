@@ -6,7 +6,7 @@
     "light": "/logo/light.png"
   },
   "openapi": ["/openapi.json"],
-  "favicon": "/favicon.svg",
+  "favicon": "/favicon.png",
   "colors": {
     "primary": "#2563eb",
     "light": "#2563eb",
