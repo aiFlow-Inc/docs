@@ -19,12 +19,12 @@
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "url": "mailto:contact@aiflow.solutions"
     }
   ],
   "topbarCtaButton": {
     "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+    "url": "/"
   },
   "tabs": [
     {
@@ -43,15 +43,16 @@
         {
           "group": "Contacts",
           "pages": [
-            "api-reference/contacts/search-contacts"
+            "api-reference/contacts/search-contacts",
+            "api-reference/contacts/get-a-contact"
           ]
         }
       ]
     }
   ],
   "footerSocials": {
-    "x": "https://x.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch"
+    "x": "https://x.com/AiFlow_Inc",
+    "github": "https://github.com/aiFlow-Inc",
+    "linkedin": "https://www.linkedin.com/company/aiflow-inc"
   }
 }

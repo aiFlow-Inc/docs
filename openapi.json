@@ -1,17 +1,13 @@
 {
     "openapi": "3.0.3",
     "info": {
-        "title": "Dub.co API",
-        "description": "Dub is link management infrastructure for companies to create marketing campaigns, link sharing features, and referral programs.",
+        "title": "AiFlow API",
+        "description": "AiFlow is an AI-powered search engine contact search and CRM.",
         "version": "0.0.1",
         "contact": {
-            "name": "Dub.co Support",
-            "email": "support@dub.co",
-            "url": "https://dub.co/api"
-        },
-        "license": {
-            "name": "AGPL-3.0 license",
-            "url": "https://github.com/dubinc/dub/blob/main/LICENSE.md"
+            "name": "AiFlow Support",
+            "email": "contact@aiflow.solutions",
+            "url": "https://www.aiflow.solutions/"
         }
     },
     "servers": [
@@ -20,31 +16,9 @@
             "description": "Production API"
         }
     ],
-    "x-speakeasy-globals": {
-        "parameters": [
-            {
-                "x-speakeasy-globals-hidden": true,
-                "name": "workspaceId",
-                "in": "query",
-                "deprecated": true,
-                "schema": {
-                    "type": "string"
-                }
-            },
-            {
-                "x-speakeasy-globals-hidden": true,
-                "name": "projectSlug",
-                "in": "query",
-                "deprecated": true,
-                "schema": {
-                    "type": "string"
-                }
-            }
-        ]
-    },
     "paths": {
         "/search/contacts": {
-            "get": {
+            "post": {
                 "operationId": "searchContacts",
                 "x-speakeasy-name-override": "search",
                 "x-speakeasy-usage-example": true,
@@ -58,18 +32,6 @@
                         "token": []
                     }
                 ],
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "orgId",
-                        "description": "The ID of the organization.",
-                        "schema": {
-                            "type": "string",
-                            "description": "The ID of the organization.",
-                            "deprecated": true
-                        }
-                    }
-                ],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -78,28 +40,25 @@
                                 "properties": {
                                     "searchTerm": {
                                         "type": "string",
-                                        "description": "The search term to use for the AI-powered query of contacts. For example, 'Hubspot'.",
+                                        "description": "The search term to use for the AI-powered query of contacts. For example, 'Hubspot'. You can search for industry keywords, job titles, or company names.",
                                         "example": "Hubspot"
-                                    },
-                                    "channel": {
-                                        "type": "string",
-                                        "nullable": true,
-                                        "description": "The Slack channel to post the results to. Only required for Slack integrations."
-                                    },
-                                    "user": {
-                                        "type": "string",
-                                        "nullable": true,
-                                        "description": "The Slack user to post the results to. Only required for Slack integrations."
                                     },
                                     "numberOfResults": {
                                         "type": "number",
                                         "nullable": true,
                                         "default": 10,
-                                        "description": "The maximum number of contacts to return. Defaults to 10."
+                                        "description": "The number of contacts to return. Defaults to 10.",
+                                        "example": 10
+                                    },
+                                    "orgId": {
+                                        "type": "string",
+                                        "description": "The organization ID to search within",
+                                        "example": "org_B5b5d6a6d7a5a1a1"
                                     }
                                 },
                                 "required": [
-                                    "searchTerm"
+                                    "searchTerm",
+                                    "orgId"
                                 ]
                             }
                         }
@@ -114,270 +73,406 @@
                                     "type": "object",
                                     "properties": {
                                         "success": {
-                                            "type": "boolean"
+                                            "type": "boolean",
+                                            "description": "Whether the request was successful."
                                         },
                                         "rows": {
                                             "type": "array",
                                             "items": {
                                                 "type": "object",
                                                 "properties": {
-                                                    "id": {
-                                                        "type": "string"
-                                                    },
-                                                    "contactId": {
-                                                        "type": "string"
-                                                    },
                                                     "companyId": {
-                                                        "type": "string"
+                                                        "type": "string",
+                                                        "description": "Unique identifier for the company",
+                                                        "example": "64882369-561d-5bda-cefe-dde056ed2e6g"
                                                     },
                                                     "title": {
-                                                        "type": "string"
+                                                        "type": "string",
+                                                        "nullable": true,
+                                                        "description": "Job title",
+                                                        "example": "Senior Product Manager"
+                                                    },
+                                                    "distance": {
+                                                        "type": "number",
+                                                        "nullable": true,
+                                                        "description": "Percentage match between the experience and the search query. Higher is better.",
+                                                        "example": 0.925
+                                                    },
+                                                    "id": {
+                                                        "type": "string",
+                                                        "description": "Unique identifier for the contact experience",
+                                                        "example": "6459d956-5e85-5dc1-a6e7-28f13bd44e3d"
                                                     },
                                                     "titleIsCurrentMaster": {
-                                                        "type": "boolean"
+                                                        "type": "boolean",
+                                                        "nullable": true,
+                                                        "description": "Indicates if this is the current master title",
+                                                        "example": true
                                                     },
                                                     "titleTypeMaster": {
-                                                        "type": "string"
+                                                        "type": "string",
+                                                        "nullable": true,
+                                                        "description": "Master type of the title",
+                                                        "example": "Manager"
                                                     },
                                                     "startsAt": {
-                                                        "type": "string"
+                                                        "type": "string",
+                                                        "nullable": true,
+                                                        "description": "Start date of the experience",
+                                                        "example": "2021-03-15T00:00:00.000Z"
                                                     },
                                                     "endsAt": {
-                                                        "type": "string"
+                                                        "type": "string",
+                                                        "nullable": true,
+                                                        "description": "End date of the experience",
+                                                        "example": "2023-12-31T00:00:00.000Z"
                                                     },
-                                                    "description": {
-                                                        "type": "string"
+                                                    "likelihoodOfDeparture": {
+                                                        "type": "number",
+                                                        "nullable": true,
+                                                        "description": "Likelihood of the contact leaving the position. May not be present",
+                                                        "example": 0.15
                                                     },
-                                                    "location": {
-                                                        "type": "string"
-                                                    },
-                                                    "city": {
-                                                        "type": "string"
-                                                    },
-                                                    "state": {
-                                                        "type": "string"
-                                                    },
-                                                    "country": {
-                                                        "type": "string"
-                                                    },
-                                                    "countryCode": {
-                                                        "type": "string"
-                                                    },
-                                                    "latitude": {
-                                                        "type": "number"
-                                                    },
-                                                    "longitude": {
-                                                        "type": "number"
-                                                    },
-                                                    "LecInvestor": {
-                                                        "type": "object",
-                                                        "properties": {
-                                                            "homeCity": {
-                                                                "type": "string"
-                                                            },
-                                                            "homeStateProvince": {
-                                                                "type": "string"
-                                                            },
-                                                            "homeCountry": {
-                                                                "type": "string"
-                                                            },
-                                                            "workCity": {
-                                                                "type": "string"
-                                                            },
-                                                            "workStateProvince": {
-                                                                "type": "string"
-                                                            },
-                                                            "workCountry": {
-                                                                "type": "string"
-                                                            },
-                                                            "altCity": {
-                                                                "type": "string"
-                                                            },
-                                                            "altStateProvince": {
-                                                                "type": "string"
-                                                            },
-                                                            "altCountry": {
-                                                                "type": "string"
-                                                            },
-                                                            "id": {
-                                                                "type": "string"
-                                                            }
-                                                        },
-                                                        "required": [
-                                                            "homeCity",
-                                                            "homeStateProvince",
-                                                            "homeCountry",
-                                                            "workCity",
-                                                            "workStateProvince",
-                                                            "workCountry",
-                                                            "altCity",
-                                                            "altStateProvince",
-                                                            "altCountry",
-                                                            "id"
-                                                        ]
-                                                    },
-                                                    "createdAt": {
-                                                        "type": "string"
-                                                    },
-                                                    "updatedAt": {
-                                                        "type": "string"
+                                                    "ipoExperience": {
+                                                        "type": "boolean",
+                                                        "nullable": true,
+                                                        "description": "Indicates if this experience involves an IPO",
+                                                        "example": false
                                                     },
                                                     "source": {
                                                         "type": "array",
                                                         "items": {
                                                             "type": "string"
-                                                        }
+                                                        },
+                                                        "description": "Matched query on the basis of company vector or job title vector",
+                                                        "example": [
+                                                            "CompanyVector",
+                                                            "JobTitleVector"
+                                                        ]
                                                     },
-                                                    "equilarContactExperienceId": {
-                                                        "type": "string"
+                                                    "contactId": {
+                                                        "type": "string",
+                                                        "description": "Unique identifier for the contact",
+                                                        "example": "8765432a-70e5-480e-cb32-7a03cd451e44"
                                                     },
-                                                    "ContactExperienceAcquisition": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "type": "object",
-                                                            "properties": {
-                                                                "nblCompanyAcquisitionId": {
-                                                                    "type": "string"
-                                                                }
+                                                    "Contact": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "string",
+                                                                "description": "Unique identifier for the contact",
+                                                                "example": "8765432a-70e5-480e-cb32-7a03cd451e44"
                                                             },
-                                                            "required": [
-                                                                "nblCompanyAcquisitionId"
-                                                            ]
-                                                        }
-                                                    },
-                                                    "equilarCompanyId": {
-                                                        "type": "string"
+                                                            "firstName": {
+                                                                "type": "string",
+                                                                "description": "First name of the contact",
+                                                                "example": "Sarah"
+                                                            },
+                                                            "lastName": {
+                                                                "type": "string",
+                                                                "description": "Last name of the contact",
+                                                                "example": "Johnson"
+                                                            },
+                                                            "title": {
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "Job title of the contact",
+                                                                "example": "Chief Technology Officer"
+                                                            },
+                                                            "biography": {
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "Biography of the contact",
+                                                                "example": "Experienced tech leader with a passion for innovation Etc etc etc."
+                                                            },
+                                                            "salesforceId": {
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "Salesforce ID of the contact",
+                                                                "example": "0048X00003egXStRBM"
+                                                            },
+                                                            "company": {
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "Company name associated with the contact",
+                                                                "example": "TechInnovate Solutions"
+                                                            },
+                                                            "ethnicity": {
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "Ethnicity of the contact",
+                                                                "example": "Asian"
+                                                            },
+                                                            "workEmailPrimary": {
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "Primary work email of the contact. Only viewable by admin, not by regular users",
+                                                                "example": "sarah.johnson@techinnovate.com"
+                                                            },
+                                                            "contactGender": {
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "Gender of the contact",
+                                                                "example": "Female"
+                                                            },
+                                                            "profilePicUrl": {
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "URL of the contact's profile picture",
+                                                                "example": "https://example.com/profiles/sarah_johnson.jpg"
+                                                            },
+                                                            "nblProfilePicUrl": {
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "URL of the contact's Nubela profile picture",
+                                                                "example": "images/f6ddb53e-0c99-5f16-9864-e24361274b5e.jpg"
+                                                            },
+                                                            "equilarPhoto": {
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "URL of the contact's Equilar photo",
+                                                                "example": "https://example.com/equilar/sarah_johnson.png"
+                                                            },
+                                                            "type": {
+                                                                "type": "string",
+                                                                "description": "Type of the contact",
+                                                                "example": "Limited Partner"
+                                                            },
+                                                            "equilarAge": {
+                                                                "type": "number",
+                                                                "nullable": true,
+                                                                "description": "Age of the contact according to Equilar",
+                                                                "example": 42
+                                                            },
+                                                            "linkedinUrl": {
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "LinkedIn URL of the contact",
+                                                                "example": "https://www.linkedin.com/in/sarah-johnson-cto/"
+                                                            },
+                                                            "LecInvestor": {
+                                                                "type": "object",
+                                                                "nullable": true,
+                                                                "properties": {
+                                                                    "homeCity": {
+                                                                        "type": "string",
+                                                                        "nullable": true,
+                                                                        "description": "Home city of the contact",
+                                                                        "example": "San Francisco"
+                                                                    },
+                                                                    "homeStateProvince": {
+                                                                        "type": "string",
+                                                                        "nullable": true,
+                                                                        "description": "Home state/province of the contact",
+                                                                        "example": "CA"
+                                                                    },
+                                                                    "homeCountry": {
+                                                                        "type": "string",
+                                                                        "nullable": true,
+                                                                        "description": "Home country of the contact",
+                                                                        "example": "United States"
+                                                                    },
+                                                                    "workCity": {
+                                                                        "type": "string",
+                                                                        "nullable": true,
+                                                                        "description": "Work city of the contact",
+                                                                        "example": "Palo Alto"
+                                                                    },
+                                                                    "workStateProvince": {
+                                                                        "type": "string",
+                                                                        "nullable": true,
+                                                                        "description": "Work state/province of the contact",
+                                                                        "example": "CA"
+                                                                    },
+                                                                    "workCountry": {
+                                                                        "type": "string",
+                                                                        "nullable": true,
+                                                                        "description": "Work country of the contact",
+                                                                        "example": "United States"
+                                                                    },
+                                                                    "altCity": {
+                                                                        "type": "string",
+                                                                        "nullable": true,
+                                                                        "description": "Alternative city of the contact",
+                                                                        "example": "New York"
+                                                                    },
+                                                                    "altStateProvince": {
+                                                                        "type": "string",
+                                                                        "nullable": true,
+                                                                        "description": "Alternative state/province of the contact",
+                                                                        "example": "NY"
+                                                                    },
+                                                                    "altCountry": {
+                                                                        "type": "string",
+                                                                        "nullable": true,
+                                                                        "description": "Alternative country of the contact",
+                                                                        "example": "United States"
+                                                                    },
+                                                                    "id": {
+                                                                        "type": "string",
+                                                                        "description": "Unique identifier for the contact",
+                                                                        "example": "35e391e5-8927-5f59-c16e-c46392d51956"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "homeCity",
+                                                                    "homeStateProvince",
+                                                                    "homeCountry",
+                                                                    "workCity",
+                                                                    "workStateProvince",
+                                                                    "workCountry",
+                                                                    "altCity",
+                                                                    "altStateProvince",
+                                                                    "altCountry",
+                                                                    "id"
+                                                                ],
+                                                                "description": "LEC Investor information"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "id",
+                                                            "firstName",
+                                                            "lastName",
+                                                            "workEmailPrimary",
+                                                            "contactGender",
+                                                            "profilePicUrl",
+                                                            "nblProfilePicUrl",
+                                                            "type",
+                                                            "linkedinUrl",
+                                                            "LecInvestor"
+                                                        ],
+                                                        "description": "Detailed contact information"
                                                     },
                                                     "company": {
                                                         "type": "object",
                                                         "properties": {
                                                             "name": {
-                                                                "type": "string"
+                                                                "type": "string",
+                                                                "description": "Name of the company",
+                                                                "example": "InnoTech Solutions"
                                                             },
                                                             "id": {
-                                                                "type": "string"
+                                                                "type": "string",
+                                                                "description": "Unique identifier for the company",
+                                                                "example": "64882369-561d-5bda-cefe-dde056ed2e6g"
                                                             },
                                                             "logoUrl": {
-                                                                "type": "string"
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "URL of the company logo",
+                                                                "example": "https://example.com/logos/innotech.png"
+                                                            },
+                                                            "competitors": {
+                                                                "type": "array",
+                                                                "nullable": true,
+                                                                "items": {
+                                                                    "type": "string"
+                                                                },
+                                                                "description": "List of competitor companies",
+                                                                "example": [
+                                                                    "TechCorp",
+                                                                    "InnovateX",
+                                                                    "FutureSoft"
+                                                                ]
+                                                            },
+                                                            "shortDescription": {
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "Short description of the company",
+                                                                "example": "Leading provider of AI-driven business solutions"
+                                                            },
+                                                            "pdlCompanyType": {
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "Company type according to People Data Labs",
+                                                                "example": "Public"
+                                                            },
+                                                            "pdlSize": {
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "Company size according to People Data Labs",
+                                                                "example": "1001-5000"
+                                                            },
+                                                            "companyTypeMaster": {
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "Master company type",
+                                                                "example": "Technology"
+                                                            },
+                                                            "nblCompanyType": {
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "Company type according to Nubela",
+                                                                "example": "PUBLICLY_TRADED"
                                                             },
                                                             "nblProfilePicUrl": {
-                                                                "type": "string"
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "URL of the company's Nubela profile picture",
+                                                                "example": "images/b45f1d92-9669-4a7b-ab87-8e5c32d63c7d.jpg"
                                                             },
-                                                            "equilarCompany": {
+                                                            "Fortune1000": {
                                                                 "type": "object",
+                                                                "nullable": true,
                                                                 "properties": {
-                                                                    "id": {
-                                                                        "type": "string"
+                                                                    "rank": {
+                                                                        "type": "number",
+                                                                        "description": "Fortune 1000 rank of the company",
+                                                                        "example": 456
                                                                     },
-                                                                    "equilarId": {
-                                                                        "type": "number"
-                                                                    },
-                                                                    "companyId": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "company": {
-                                                                        "type": "object",
-                                                                        "properties": {
-                                                                            "id": {
-                                                                                "type": "string"
-                                                                            },
-                                                                            "name": {
-                                                                                "type": "string"
-                                                                            },
-                                                                            "logoUrl": {
-                                                                                "type": "string"
-                                                                            },
-                                                                            "nblProfilePicUrl": {
-                                                                                "type": "string"
-                                                                            },
-                                                                            "equilarCompany": {
-                                                                                "type": "object",
-                                                                                "properties": {
-                                                                                    "id": {
-                                                                                        "type": "string"
-                                                                                    },
-                                                                                    "equilarId": {
-                                                                                        "type": "number"
-                                                                                    },
-                                                                                    "companyId": {
-                                                                                        "type": "string"
-                                                                                    },
-                                                                                    "name": {
-                                                                                        "type": "string",
-                                                                                        "nullable": true
-                                                                                    },
-                                                                                    "logoUrl": {
-                                                                                        "type": "string",
-                                                                                        "nullable": true
-                                                                                    },
-                                                                                    "nblProfilePicUrl": {
-                                                                                        "type": "string",
-                                                                                        "nullable": true
-                                                                                    }
-                                                                                },
-                                                                                "required": [
-                                                                                    "id",
-                                                                                    "equilarId",
-                                                                                    "companyId",
-                                                                                    "name",
-                                                                                    "logoUrl",
-                                                                                    "nblProfilePicUrl"
-                                                                                ]
-                                                                            }
-                                                                        },
-                                                                        "required": [
-                                                                            "id",
-                                                                            "name",
-                                                                            "logoUrl",
-                                                                            "nblProfilePicUrl",
-                                                                            "equilarCompany"
-                                                                        ]
+                                                                    "revenueMillions": {
+                                                                        "type": "number",
+                                                                        "description": "Revenue in millions",
+                                                                        "example": 3500
                                                                     }
                                                                 },
                                                                 "required": [
-                                                                    "id",
-                                                                    "equilarId",
-                                                                    "companyId",
-                                                                    "company"
-                                                                ]
+                                                                    "rank",
+                                                                    "revenueMillions"
+                                                                ],
+                                                                "description": "Fortune 1000 information"
                                                             }
                                                         },
                                                         "required": [
                                                             "name",
-                                                            "id",
                                                             "logoUrl",
-                                                            "nblProfilePicUrl",
-                                                            "equilarCompany"
-                                                        ]
+                                                            "pdlCompanyType",
+                                                            "pdlSize",
+                                                            "nblProfilePicUrl"
+                                                        ],
+                                                        "description": "Detailed company information"
+                                                    },
+                                                    "_count": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "ContactExperienceAcquisition": {
+                                                                "type": "number",
+                                                                "description": "Count of M&A acquisitions that the contact engaged in during this experience",
+                                                                "example": 2
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "ContactExperienceAcquisition"
+                                                        ],
+                                                        "description": "Count of related entities"
                                                     }
                                                 },
                                                 "required": [
-                                                    "id",
-                                                    "contactId",
                                                     "companyId",
                                                     "title",
+                                                    "id",
                                                     "titleIsCurrentMaster",
                                                     "titleTypeMaster",
                                                     "startsAt",
                                                     "endsAt",
-                                                    "description",
-                                                    "location",
-                                                    "city",
-                                                    "state",
-                                                    "country",
-                                                    "countryCode",
-                                                    "latitude",
-                                                    "longitude",
-                                                    "LecInvestor",
-                                                    "createdAt",
-                                                    "updatedAt",
-                                                    "source",
-                                                    "equilarContactExperienceId",
-                                                    "ContactExperienceAcquisition",
-                                                    "equilarCompanyId",
+                                                    "likelihoodOfDeparture",
+                                                    "ipoExperience",
+                                                    "contactId",
+                                                    "Contact",
                                                     "company"
                                                 ]
-                                            }
+                                            },
+                                            "description": "The contacts that matched the search query."
                                         },
                                         "pagination": {
                                             "type": "object",
@@ -402,14 +497,17 @@
                                                 "totalRows",
                                                 "currentPage",
                                                 "totalPages"
-                                            ]
+                                            ],
+                                            "description": "Pagination information for the search results."
                                         },
                                         "lastRow": {
-                                            "type": "number"
+                                            "type": "number",
+                                            "description": "The last row of the search results."
                                         },
                                         "queryDuration": {
                                             "type": "number",
-                                            "nullable": true
+                                            "nullable": true,
+                                            "description": "The duration of the search query in seconds."
                                         }
                                     },
                                     "required": [
@@ -452,6 +550,299 @@
                     }
                 }
             }
+        },
+        "/search/contact": {
+            "post": {
+                "operationId": "getUniqueContact",
+                "x-speakeasy-name-override": "search",
+                "x-speakeasy-usage-example": true,
+                "summary": "Get a contact",
+                "description": "Get a contact for the authenticated organization.",
+                "tags": [
+                    "Contacts"
+                ],
+                "security": [
+                    {
+                        "token": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "contactId": {
+                                        "type": "string",
+                                        "description": "Unique identifier of the contact to retrieve",
+                                        "example": "c1fdf4d8-384b-4b1c-a504-e7e2ea0e7f22"
+                                    },
+                                    "orgId": {
+                                        "type": "string",
+                                        "description": "Identifier of the organization to search within",
+                                        "example": "org_A5b5d6a6d7a5a2a2"
+                                    }
+                                },
+                                "required": [
+                                    "contactId",
+                                    "orgId"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The queried contact",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "firstName": {
+                                            "type": "string",
+                                            "description": "First name of the contact",
+                                            "example": "John"
+                                        },
+                                        "lastName": {
+                                            "type": "string",
+                                            "description": "Last name of the contact",
+                                            "example": "Doe"
+                                        },
+                                        "profilePicUrl": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "description": "URL of the contact's profile picture",
+                                            "example": "https://example.com/profile-pic.jpg"
+                                        },
+                                        "linkedinUrl": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "description": "LinkedIn profile URL of the contact",
+                                            "example": "https://www.linkedin.com/in/johndoe"
+                                        },
+                                        "crunchbaseUrl": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "description": "Crunchbase profile URL of the contact",
+                                            "example": "https://www.crunchbase.com/person/john-doe"
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "description": "Current job title of the contact",
+                                            "example": "Chief Technology Officer"
+                                        },
+                                        "company": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "description": "Current company of the contact",
+                                            "example": "Tech Innovations Inc."
+                                        },
+                                        "languages": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            },
+                                            "description": "Languages spoken by the contact",
+                                            "example": [
+                                                "English",
+                                                "Spanish"
+                                            ]
+                                        },
+                                        "biography": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "description": "Biography of the contact",
+                                            "example": "John is a seasoned technology leader with over 15 years of experience..."
+                                        },
+                                        "experiences": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "description": "Unique identifier for the experience",
+                                                        "example": "exp_123456789"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "nullable": true,
+                                                        "description": "Description of the experience",
+                                                        "example": "Led a team of 10 developers in creating a new product."
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "nullable": true,
+                                                        "description": "Job title",
+                                                        "example": "Senior Software Engineer"
+                                                    },
+                                                    "startsAt": {
+                                                        "type": "string",
+                                                        "nullable": true,
+                                                        "description": "Start date of the experience",
+                                                        "example": "2020-01-15T00:00:00.000Z"
+                                                    },
+                                                    "endsAt": {
+                                                        "type": "string",
+                                                        "nullable": true,
+                                                        "description": "End date of the experience",
+                                                        "example": "2023-06-30T00:00:00.000Z"
+                                                    },
+                                                    "location": {
+                                                        "type": "string",
+                                                        "nullable": true,
+                                                        "description": "Location of the experience",
+                                                        "example": "San Francisco, CA"
+                                                    },
+                                                    "titleIsCurrentMaster": {
+                                                        "type": "boolean",
+                                                        "nullable": true,
+                                                        "description": "Indicates if this is the current primary title",
+                                                        "example": true
+                                                    },
+                                                    "company": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "name": {
+                                                                "type": "string",
+                                                                "description": "Name of the company or school",
+                                                                "example": "Acme Corporation or Harvard University"
+                                                            },
+                                                            "linkedinProfileUrl": {
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "LinkedIn profile URL of the company or school",
+                                                                "example": "https://www.linkedin.com/company/acme-corp"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "name",
+                                                            "linkedinProfileUrl"
+                                                        ]
+                                                    }
+                                                },
+                                                "required": [
+                                                    "id",
+                                                    "description",
+                                                    "title",
+                                                    "startsAt",
+                                                    "endsAt",
+                                                    "location",
+                                                    "titleIsCurrentMaster",
+                                                    "company"
+                                                ]
+                                            },
+                                            "description": "Professional experiences of the contact"
+                                        },
+                                        "education": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "startsAt": {
+                                                        "type": "string",
+                                                        "nullable": true,
+                                                        "description": "Start date of education",
+                                                        "example": "2016-09-01T00:00:00.000Z"
+                                                    },
+                                                    "endsAt": {
+                                                        "type": "string",
+                                                        "nullable": true,
+                                                        "description": "End date of education",
+                                                        "example": "2020-05-31T00:00:00.000Z"
+                                                    },
+                                                    "fieldOfStudy": {
+                                                        "type": "string",
+                                                        "nullable": true,
+                                                        "description": "Field of study",
+                                                        "example": "Computer Science"
+                                                    },
+                                                    "degreeName": {
+                                                        "type": "string",
+                                                        "nullable": true,
+                                                        "description": "Name of the degree obtained",
+                                                        "example": "Bachelor of Science"
+                                                    },
+                                                    "company": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "name": {
+                                                                "type": "string",
+                                                                "description": "Name of the company or school",
+                                                                "example": "Acme Corporation or Harvard University"
+                                                            },
+                                                            "linkedinProfileUrl": {
+                                                                "type": "string",
+                                                                "nullable": true,
+                                                                "description": "LinkedIn profile URL of the company or school",
+                                                                "example": "https://www.linkedin.com/company/acme-corp"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "name",
+                                                            "linkedinProfileUrl"
+                                                        ]
+                                                    }
+                                                },
+                                                "required": [
+                                                    "startsAt",
+                                                    "endsAt",
+                                                    "fieldOfStudy",
+                                                    "degreeName",
+                                                    "company"
+                                                ]
+                                            },
+                                            "description": "Educational background of the contact"
+                                        }
+                                    },
+                                    "required": [
+                                        "firstName",
+                                        "lastName",
+                                        "profilePicUrl",
+                                        "linkedinUrl",
+                                        "crunchbaseUrl",
+                                        "title",
+                                        "company",
+                                        "languages",
+                                        "biography",
+                                        "experiences",
+                                        "education"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/409"
+                    },
+                    "410": {
+                        "$ref": "#/components/responses/410"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/429"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -460,7 +851,7 @@
                 "type": "http",
                 "description": "Default authentication mechanism",
                 "scheme": "bearer",
-                "x-speakeasy-example": "DUB_API_KEY"
+                "x-speakeasy-example": "AIFLOW_API_KEY"
             }
         },
         "responses": {
@@ -491,7 +882,7 @@
                                         "doc_url": {
                                             "type": "string",
                                             "description": "A link to our documentation with more details about this error code",
-                                            "example": "https://dub.co/docs/api-reference/errors#bad-request"
+                                            "example": "https://aiflow.solutions/docs/api-reference/errors#bad-request"
                                         }
                                     },
                                     "required": [
@@ -534,7 +925,7 @@
                                         "doc_url": {
                                             "type": "string",
                                             "description": "A link to our documentation with more details about this error code",
-                                            "example": "https://dub.co/docs/api-reference/errors#unauthorized"
+                                            "example": "https://aiflow.solutions/docs/api-reference/errors#unauthorized"
                                         }
                                     },
                                     "required": [
@@ -577,7 +968,7 @@
                                         "doc_url": {
                                             "type": "string",
                                             "description": "A link to our documentation with more details about this error code",
-                                            "example": "https://dub.co/docs/api-reference/errors#forbidden"
+                                            "example": "https://aiflow.solutions/docs/api-reference/errors#forbidden"
                                         }
                                     },
                                     "required": [
@@ -620,7 +1011,7 @@
                                         "doc_url": {
                                             "type": "string",
                                             "description": "A link to our documentation with more details about this error code",
-                                            "example": "https://dub.co/docs/api-reference/errors#not-found"
+                                            "example": "https://aiflow.solutions/docs/api-reference/errors#not-found"
                                         }
                                     },
                                     "required": [
@@ -663,7 +1054,7 @@
                                         "doc_url": {
                                             "type": "string",
                                             "description": "A link to our documentation with more details about this error code",
-                                            "example": "https://dub.co/docs/api-reference/errors#conflict"
+                                            "example": "https://aiflow.solutions/docs/api-reference/errors#conflict"
                                         }
                                     },
                                     "required": [
@@ -706,7 +1097,7 @@
                                         "doc_url": {
                                             "type": "string",
                                             "description": "A link to our documentation with more details about this error code",
-                                            "example": "https://dub.co/docs/api-reference/errors#invite-expired"
+                                            "example": "https://aiflow.solutions/docs/api-reference/errors#invite-expired"
                                         }
                                     },
                                     "required": [
@@ -749,7 +1140,7 @@
                                         "doc_url": {
                                             "type": "string",
                                             "description": "A link to our documentation with more details about this error code",
-                                            "example": "https://dub.co/docs/api-reference/errors#unprocessable-entity"
+                                            "example": "https://aiflow.solutions/docs/api-reference/errors#unprocessable-entity"
                                         }
                                     },
                                     "required": [
@@ -792,7 +1183,7 @@
                                         "doc_url": {
                                             "type": "string",
                                             "description": "A link to our documentation with more details about this error code",
-                                            "example": "https://dub.co/docs/api-reference/errors#rate-limit_exceeded"
+                                            "example": "https://aiflow.solutions/docs/api-reference/errors#rate-limit_exceeded"
                                         }
                                     },
                                     "required": [
@@ -835,7 +1226,7 @@
                                         "doc_url": {
                                             "type": "string",
                                             "description": "A link to our documentation with more details about this error code",
-                                            "example": "https://dub.co/docs/api-reference/errors#internal-server_error"
+                                            "example": "https://aiflow.solutions/docs/api-reference/errors#internal-server_error"
                                         }
                                     },
                                     "required": [
